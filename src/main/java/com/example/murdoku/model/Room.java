@@ -22,4 +22,8 @@ public class Room {
     public Set<Cell> cells() {
         return Set.copyOf(cells);
     }
+
+    public boolean containsCell(int row, int col) {
+        return cells.stream().anyMatch(cell -> cell.row() == row && cell.col() == col);
+    }
 }

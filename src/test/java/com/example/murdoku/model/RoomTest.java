@@ -1,14 +1,16 @@
 package com.example.murdoku.model;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.Set;
 
 public class RoomTest {
 
-    @Test
-    void shouldCollectAddedCell() {
-        Room room = new Room("Hallway");
+    Room room = new Room("Hallway");
+
+    @BeforeEach
+    void setUp() {
         room.addCell(new Cell(1, 1));
         room.addCell(new Cell(2, 1));
         room.addCell(new Cell(3, 1));
@@ -16,6 +18,11 @@ public class RoomTest {
         room.addCell(new Cell(3, 3));
         room.addCell(new Cell(3, 4));
         room.addCell(new Cell(3, 5));
+    }
+
+
+    @Test
+    void shouldCollectAddedCell() {
 
         Set<Cell> cells = room.cells();
         assertEquals(7, cells.size());
@@ -27,4 +34,16 @@ public class RoomTest {
         assertTrue(cells.contains(new Cell(3, 4)));
         assertTrue(cells.contains(new Cell(3, 5)));
     }
+
+
+    @Test
+    void shouldReturnTrueIfContainsCell() {
+        assertTrue(room.containsCell(3, 4));
+    }
+
+    @Test
+    void shouldReturnFalseIfDoesNotContainCell() {
+        assertFalse(room.containsCell(4, 4));
+    }
+
 }
