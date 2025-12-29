@@ -23,7 +23,11 @@ public class Room {
         return Set.copyOf(cells);
     }
 
-    public boolean containsCell(int row, int col) {
+    public boolean containsCellAt(int row, int col) {
         return cells.stream().anyMatch(cell -> cell.row() == row && cell.col() == col);
+    }
+
+    public boolean containsCell(Cell cell) {
+        return cells.contains(cell);
     }
 }

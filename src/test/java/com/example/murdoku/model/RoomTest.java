@@ -2,7 +2,10 @@ package com.example.murdoku.model;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+
 import java.util.Set;
 
 public class RoomTest {
@@ -38,12 +41,23 @@ public class RoomTest {
 
     @Test
     void shouldReturnTrueIfContainsCell() {
-        assertTrue(room.containsCell(3, 4));
+        assertTrue(room.containsCellAt(3, 4));
     }
 
     @Test
     void shouldReturnFalseIfDoesNotContainCell() {
-        assertFalse(room.containsCell(4, 4));
+        assertFalse(room.containsCellAt(4, 4));
+    }
+
+    @Test
+    void shouldReturnTheSameForContains() {
+        Cell cell = new Cell(3, 4);
+        assertTrue(room.containsCell(cell));
+        assertTrue(room.containsCellAt(cell.row(), cell.col()));
+
+        Cell cell2 = new Cell(5, 8);
+
+        assertThat(room.containsCell(cell2)).isEqualTo(room.containsCellAt(cell2.row(), cell2.col()));
     }
 
 }

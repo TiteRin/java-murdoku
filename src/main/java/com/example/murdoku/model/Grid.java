@@ -23,10 +23,20 @@ public class Grid {
             throw new IllegalArgumentException("Room overlaps with another room");
         }
 
-        if (room.cells().stream().anyMatch(cell -> cell.row() < 0 || cell.col() < 0 || cell.row() >= size || cell.col() >= size)) {
-            throw new IllegalArgumentException("Room contains cell out of bounds");
+        for (Cell cell : room.cells()) {
+            validateBounds(cell);
         }
+
         this.rooms.add(room);
+    }
+
+    private void validateBounds(Cell cell) {
+        if (cell.row() < 0 ||
+                cell.col() < 0 ||
+                cell.row() >= size ||
+                cell.col() >= size) {
+            throw new IllegalArgumentException("Cell is out of bounds: " + cell);
+        }
     }
 
     public int size() {
@@ -45,17 +55,18 @@ public class Grid {
         return Set.copyOf(rooms);
     }
 
-    public Room getRoomAt(int row, int col) {
-
-        if (row < 0 || row >= size || col < 0 || col >= size) {
-            throw new IllegalArgumentException("Cell is out of bounds");
-        }
+    public Room getRoomAt(Cell cell) {
+        validateBounds(cell);
 
         for (Room room : rooms) {
-            if (room.containsCell(row, col)) {
+            if (room.containsCell(cell)) {
                 return room;
             }
         }
         return null;
+    }
+
+    public Room getRoomAt(int row, int col) {
+        return getRoomAt(new Cell(row, col));
     }
 }
