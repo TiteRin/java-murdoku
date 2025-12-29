@@ -1,10 +1,13 @@
 package com.example.murdoku.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.HashSet;
 import java.util.Set;
 
 public class Grid {
 
+    @JsonProperty("size")
     private final int size;
     private final Set<Room> rooms = new HashSet<>();
 
