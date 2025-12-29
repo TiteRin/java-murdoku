@@ -21,4 +21,9 @@ public class GridServiceTest {
         assertEquals(9, grid.size());
     }
 
+    @Test
+    void shouldThrowExceptionIfInvalidSize() {
+        assertThrows(IllegalArgumentException.class, () -> gridService.createEmptyGrid(0));
+    }
+
 }
