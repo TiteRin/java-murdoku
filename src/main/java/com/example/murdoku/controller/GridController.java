@@ -20,7 +20,12 @@ public class GridController {
 
     @GetMapping("/{size}")
     public ResponseEntity<Grid> emptyGrid(@PathVariable int size) {
-        Grid grid = gridService.createEmptyGrid(size);
-        return ResponseEntity.ok(grid);
+        try {
+            Grid grid = gridService.createEmptyGrid(size);
+            return ResponseEntity.ok(grid);
+        }
+        catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 }

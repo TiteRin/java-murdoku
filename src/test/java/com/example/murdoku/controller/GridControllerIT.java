@@ -24,4 +24,13 @@ public class GridControllerIT {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size", is(4)));
     }
+
+    @Test
+    void shouldReturnBadRequestWhenInvalidSize() throws Exception {
+        mvc.perform(get("/api/grid/0"))
+                .andExpect(status().isBadRequest());
+
+        mvc.perform(get("/api/grid/-1"))
+                .andExpect(status().isBadRequest());
+    }
 }
