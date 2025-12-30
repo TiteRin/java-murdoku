@@ -1,8 +1,11 @@
 package com.example.murdoku.model;
 
-import java.util.Objects;
 
-public record Item(String name, String type, boolean canBeOccupied, int nbCells) {
+public record Item(
+        String name,
+        String type,
+        boolean canBeOccupied,
+        int nbCells) implements GridObject {
 
     public Item {
         if (nbCells < 1) {
