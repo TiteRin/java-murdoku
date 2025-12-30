@@ -9,27 +9,14 @@ public class ItemTest {
 
     @Test
     void shouldCreateItemWithCorrectValue() {
-        Item item = new Item("Chair", "Furniture", true, 1);
+        Item item = new Item("Chair", new Cell(1, 1), true);
         assertThat(item.name()).isEqualTo("Chair");
-        assertThat(item.type()).isEqualTo("Furniture");
         assertThat(item.canBeOccupied()).isTrue();
-        assertThat(item.nbCells()).isEqualTo(1);
     }
 
     @Test
     void shouldRejectCreationIfMissingValue() {
-        assertThrows(IllegalArgumentException.class, () -> new Item(null, "Furniture", true, 1));
-        assertThrows(IllegalArgumentException.class, () -> new Item("Chair", null, true, 1));
-        assertThrows(IllegalArgumentException.class, () -> new Item("Chair", "Furniture", true, 0));
+        assertThrows(IllegalArgumentException.class, () -> new Item(null, new Cell(0, 0), true));
+        assertThrows(IllegalArgumentException.class, () -> new Item("Chair", new Cell(-1, -1), true));
     }
-
-    @Test
-    void shouldReturnSingleCellItem() {
-        Item item = Item.singleCell("Chair", "Furniture", true);
-        assertThat(item.name()).isEqualTo("Chair");
-        assertThat(item.type()).isEqualTo("Furniture");
-        assertThat(item.canBeOccupied()).isTrue();
-        assertThat(item.nbCells()).isEqualTo(1);
-    }
-
 }

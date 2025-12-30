@@ -1,27 +1,51 @@
 package com.example.murdoku.model;
 
 
-public record Item(
-        String name,
-        String type,
-        boolean canBeOccupied,
-        int nbCells) implements GridObject {
+import java.util.HashSet;
+import java.util.Set;
 
-    public Item {
-        if (nbCells < 1) {
-            throw new IllegalArgumentException("Number of cells must be greater than 0");
-        }
+public class Item implements GridObject {
 
+    private final String name;
+    private final Set<Cell> cells = new HashSet<>();
+    private final boolean canBeOccupied;
+
+    public Item(String name, Cell cell, boolean canBeOccupied) {
+        this(name, Set.of(cell), canBeOccupied);
+    }
+
+
+    public Item(String name, Set<Cell> cells, boolean canBeOccupied) {
         if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("Item must have a name");
         }
 
-        if (type == null || type.isBlank()) {
-            throw new IllegalArgumentException("Item must have a type");
-        }
+        this.name = name;
+        this.canBeOccupied = canBeOccupied;
+
+        setCells(cells);
     }
 
-    public static Item singleCell(String name, String type, boolean canBeOccupied) {
-        return new Item(name, type, canBeOccupied, 1);
+    public String name() {
+        return name;
+    }
+
+    public Set<Cell> cells() {
+        return Set.copyOf(cells);
+    }
+
+    public boolean canBeOccupied() {
+        return canBeOccupied;
+    }
+
+    @Override
+    public void addCell(Cell cell) {
+        this.cells.add(cell);
+    }
+
+    @Override
+    public void setCells(Set<Cell> cells) {
+        this.cells.clear();
+        this.cells.addAll(cells);
     }
 }

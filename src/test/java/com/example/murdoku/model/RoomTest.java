@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class RoomTest {
@@ -14,6 +15,9 @@ public class RoomTest {
 
     @BeforeEach
     void setUp() {
+
+        Set cells = new HashSet<>();
+
         room.addCell(new Cell(1, 1));
         room.addCell(new Cell(2, 1));
         room.addCell(new Cell(3, 1));

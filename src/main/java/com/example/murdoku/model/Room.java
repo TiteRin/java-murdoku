@@ -3,7 +3,7 @@ package com.example.murdoku.model;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Room {
+public class Room implements GridObject {
     private final String name;
     private final Set<Cell> cells = new HashSet<>();
 
@@ -11,8 +11,9 @@ public class Room {
         this.name = name;
     }
 
-    public void addCell(Cell cell) {
-        cells.add(cell);
+    public Room(String name, Set<Cell> cells) {
+        this.name = name;
+        setCells(cells);
     }
 
     public String name() {
@@ -23,11 +24,14 @@ public class Room {
         return Set.copyOf(cells);
     }
 
-    public boolean containsCellAt(int row, int col) {
-        return cells.stream().anyMatch(cell -> cell.row() == row && cell.col() == col);
+    @Override
+    public void addCell(Cell cell) {
+        this.cells.add(cell);
     }
 
-    public boolean containsCell(Cell cell) {
-        return cells.contains(cell);
+    @Override
+    public void setCells(Set<Cell> cells) {
+        this.cells.clear();
+        this.cells.addAll(cells);
     }
 }
