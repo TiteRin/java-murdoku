@@ -5,8 +5,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -51,17 +51,17 @@ public class GridTest {
 
         @Test
         void shouldPlaceRoomAndRetrieveIt() {
-            Set<Room> rooms = new HashSet<>();
-            rooms.add(room);
+            Map<Cell, Room> rooms = new HashMap<>();
+            for (Cell cell : room.cells()) rooms.put(cell, room);
 
             assertThat(grid.rooms()).isEqualTo(rooms);
-            assertThat(grid.getRoomAt(3, 1)).isEqualTo(room);
+            assertThat(grid.getRoomAt(3, 1)).contains(room);
         }
 
         @Test
         void shouldReturnNullIfRoomDoesNotExist() {
             Grid grid = new Grid(9);
-            assertNull(grid.getRoomAt(1, 1));
+            assertThat(grid.getRoomAt(1, 1)).isEmpty();
         }
 
         @Test

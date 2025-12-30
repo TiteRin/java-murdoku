@@ -8,7 +8,7 @@ public class Grid {
 
     @JsonProperty("size")
     private final int size;
-    private final Set<Room> rooms = new HashSet<>();
+    private final Map<Cell, Room> rooms = new HashMap<>();
     private final Map<Cell, Item> items = new HashMap<>();
 
     public Grid(int size) {
@@ -22,15 +22,14 @@ public class Grid {
 
     public void placeRoom(Room room) {
 
-        if (room.cells().stream().anyMatch(cell -> getRoomAt(cell.row(), cell.col()) != null)) {
-            throw new IllegalArgumentException("Room overlaps with another room");
-        }
-
         for (Cell cell : room.cells()) {
+            if (getRoomAt(cell).isPresent()) throw new IllegalArgumentException();
             validateBounds(cell);
         }
 
-        this.rooms.add(room);
+        for (Cell cell : room.cells()) {
+            rooms.put(cell, room);
+        }
     }
 
     private void validateBounds(Cell cell) {
@@ -54,22 +53,16 @@ public class Grid {
         return size;
     }
 
-    public Set<Room> rooms() {
-        return Set.copyOf(rooms);
+    public Map<Cell, Room> rooms() {
+        return Map.copyOf(rooms);
     }
 
-    public Room getRoomAt(Cell cell) {
+    public Optional<Room> getRoomAt(Cell cell) {
         validateBounds(cell);
-
-        for (Room room : rooms) {
-            if (room.containsCell(cell)) {
-                return room;
-            }
-        }
-        return null;
+        return Optional.ofNullable(rooms.get(cell));
     }
 
-    public Room getRoomAt(int row, int col) {
+    public Optional<Room> getRoomAt(int row, int col) {
         return getRoomAt(new Cell(row, col));
     }
 
