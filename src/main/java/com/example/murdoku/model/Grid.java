@@ -2,14 +2,14 @@ package com.example.murdoku.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class Grid {
 
     @JsonProperty("size")
     private final int size;
     private final Set<Room> rooms = new HashSet<>();
+    private final Map<Cell, Item> items = new HashMap<>();
 
     public Grid(int size) {
 
@@ -71,5 +71,21 @@ public class Grid {
 
     public Room getRoomAt(int row, int col) {
         return getRoomAt(new Cell(row, col));
+    }
+
+    public void placeItem(Cell cell, Item item) {
+
+        validateBounds(cell);
+
+        if (getItemAt(cell).isPresent()) throw new IllegalArgumentException();
+        items.put(cell, item);
+    }
+
+    public Optional<Item> getItemAt(Cell cell) {
+        return Optional.ofNullable(items.get(cell));
+    }
+
+    public Optional<Item> getItemAt(int row, int col) {
+        return getItemAt(new Cell(row, col));
     }
 }

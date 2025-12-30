@@ -1,6 +1,7 @@
 package com.example.murdoku.model;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -91,4 +92,43 @@ public class GridTest {
     }
 
 
+    @Nested
+    class ItemTests {
+
+        Grid grid;
+        Cell cell;
+
+        @BeforeEach
+        void setUp() {
+            grid = new Grid(9);
+            cell = new Cell(1, 1);
+        }
+
+        @Test
+        void shouldReturnEmptyWhenNoItemIsPlaced() {
+            assertThat(grid.getItemAt(cell)).isEmpty();
+        }
+
+        @Test
+        void shouldReturnItemWhenItemIsPlaced() {
+
+            Item item = Item.singleCell("Chair", "Furniture", true);
+            grid.placeItem(cell, item);
+            assertThat(grid.getItemAt(cell)).contains(item);
+        }
+
+        @Test
+        void shouldThrowExceptionIfCellIsAlreadyOccupied() {
+            Item item = Item.singleCell("Chair", "Furniture", true);
+            grid.placeItem(cell, item);
+            assertThrows(IllegalArgumentException.class, () -> grid.placeItem(cell, item));
+        }
+
+        @Test
+        @DisplayName("Should throw exception if cell is out of bound")
+        void shouldThrowExceptionIfCellIsOutOfBounds() {
+            Cell cell = new Cell(10, 10);
+            assertThrows(IllegalArgumentException.class, () -> grid.placeItem(cell, Item.singleCell("Chair", "Furniture", true)));
+        }
+    }
 }
