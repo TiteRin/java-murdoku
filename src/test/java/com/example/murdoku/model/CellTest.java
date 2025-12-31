@@ -27,7 +27,13 @@ class CellTest {
 
     @Test
     void shouldCreateFromStringRepresentation() {
-        Cell cell = Cell.fromString("R3,C6");
-        assertThat(cell).isEqualTo(new Cell(2, 5));
+        assertThat(Cell.fromString("R3,C6")).isEqualTo(new Cell(2, 5));
+        assertThat(Cell.fromString("c6 r3")).isEqualTo(new Cell(2, 5));
+        assertThat(Cell.fromString("c 6 r 3")).isEqualTo(new Cell(2, 5));
+        assertThat(Cell.fromString("R3-C6")).isEqualTo(new Cell(2, 5));
+        assertThat(Cell.fromString("R3C6")).isEqualTo(new Cell(2, 5));
+
+        assertThrows(IllegalArgumentException.class, () -> Cell.fromString("rrrccc"));
+        assertThrows(IllegalArgumentException.class, () -> Cell.fromString("r-1 c2"));
     }
 }

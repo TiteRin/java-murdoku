@@ -20,38 +20,25 @@ public record Cell(Integer row, Integer col) {
 
     public static Cell fromString(String cellString) {
 
-        String[] results = extractCoordinates(cellString);
+        Pattern pattern = Pattern.compile("(?i)(R|C)\\s*(-?\\d+)");
+        Matcher matcher = pattern.matcher(cellString);
 
-        return new Cell(
-                Integer.parseInt(results[0].substring(1)) - 1,
-                Integer.parseInt(results[1].substring(1)) - 1
-        );
-    }
+        Integer row = null;
+        Integer col = null;
 
-    private static String[] extractCoordinates(String cellString) {
-        Pattern regex = Pattern.compile("(?<R1>R\\s*-?\\d+)\\D*(?<C1>C\\s*-?\\d+)|(?<C2>C\\s*-?\\d+)\\D*(?<R2>R\\s*-?\\d+)(R\\s*-?\\d+)\\D*(C\\s*-?\\d+)|(C\\s*-?\\d+)\\D*(R\\s*-?\\d+)");
-        Matcher matcher = regex.matcher(cellString);
+        while (matcher.find()) {
+            String type = matcher.group(1).toUpperCase();
+            int value = Integer.parseInt(matcher.group(2)) - 1;
 
-        if (!matcher.matches()) {
+            if (type.equals("R")) row = value;
+            else if (type.equals("C")) col = value;
+        }
+
+        if (row == null || col == null) {
             throw new IllegalArgumentException("Invalid cell string: " + cellString);
         }
 
-        MatchResult results = matcher.toMatchResult();
-        String[] coordinates = new String[2];
-
-        if (results.group("R1") != null && results.group("C1") != null) {
-            coordinates[0] = results.group("R1");
-            coordinates[1] = results.group("C1");
-            return coordinates;
-        }
-
-        if (results.group("C2") != null && results.group("R2") != null) {
-            coordinates[0] = results.group("R2");
-            coordinates[1] = results.group("C2");
-            return coordinates;
-        }
-
-        throw new IllegalArgumentException("Invalid cell string: " + cellString);
+        return new Cell(row, col);
     }
 
     public String rowToString() {
